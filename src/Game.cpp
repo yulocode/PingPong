@@ -93,7 +93,7 @@ public:
         {
             speedY *= -1;
         }
-        if(x + radius >= GetScreenWidth() || y - radius <= 0)
+        if(y + radius >= GetScreenWidth() || y - radius <= 0)
         {
             speedX *= -1;
         }
@@ -127,29 +127,16 @@ int main()
     ball.speedX = 7;
     ball.speedY = 7;
 
-    bool isInMenu = true;
+    bool isMenu = true;
     while (!WindowShouldClose())
     {
-
+        DrawText("Press Enter",width/2, heigth/2, 50, BLACK);
         if(IsKeyPressed(KEY_ENTER))
         {
-            isInMenu = false;
-        } else if(IsKeyPressed(KEY_P))
-        {
-            isInMenu = true;
+            isMenu = false;
         }
         
         BeginDrawing();
-
-            if(isInMenu)
-            {
-            ClearBackground(RAYWHITE);
-            DrawText("Press enter to play",190, 200, 50, BLACK);
-            DrawText("Controls: Up and Down", 190, 250, 20, BLACK);
-            DrawText("Press P to pause", 190, 270, 20, BLACK);
-            }
-            else 
-            {
             ClearBackground(GRAY);
             ball.Draw();
             ball.Update();
@@ -160,7 +147,6 @@ int main()
             cpupaddle.Draw();
             cpupaddle.Update(ball.y);
             DrawLine(width/2, 0, width/2,heigth, WHITE);
-            }
 
         EndDrawing();
     }
