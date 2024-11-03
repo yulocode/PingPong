@@ -5,9 +5,10 @@ After `git clone https://github.com/yulocode/PingPong.git`
 
 Put main.cpp on src folder
 <p align="center">
- ============================================================================================
+ =================================================================================
 </p>
-# Video Tutorial
+
+<h2>Video Tutorial</h2>
 Powerful Raylib
 <p align="center">
   <img src="preview.jpg" alt="" width="800">
