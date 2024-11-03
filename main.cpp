@@ -38,8 +38,6 @@ Paddle player;
 int width = 1260;
 int heigth = 840;
 
-Vector2 RectanglePOS2 = {width-35, 600};
-Vector2 RectangleSize2 = {25.0f,120.0f};
 class  Ball
 {
 public:
@@ -69,11 +67,6 @@ public:
             
         }
 
-        if(x + radius == (RectanglePOS2.x && RectanglePOS2.y) )
-        {
-            speedX *= -1;
-        }
-
         if(y + radius >= GetScreenHeight() || y - radius <= 0)
         {
             speedY *= -1;
@@ -85,13 +78,17 @@ public:
 //{25.0f,120.0f}
 
 Ball ball;
+Paddle enemy; 
    
 int main()
 {
    
 
     InitWindow(width, heigth, "Ping Pong!");
-    
+    enemy.x = width-35;
+    enemy.y = (heigth/2)-60; 
+    enemy.width = 25.0f;
+    enemy.heigth = 120.0f;
     player.x = 10; 
     player.y = (heigth/2)-60;
     
@@ -111,10 +108,11 @@ int main()
             ClearBackground(GRAY);
             ball.Draw();
             ball.Update();
+           
             player.Draw();
             player.Update();
-    
-            DrawRectangleV(RectanglePOS2, RectangleSize2, WHITE);
+
+            enemy.Draw();
 
             DrawLine(width/2, 0, width/2,heigth, WHITE);
 
