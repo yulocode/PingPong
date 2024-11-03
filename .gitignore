@@ -1,3 +1,10 @@
 *.exe
 *.dsym
 main
+./.vscode
+./Assets 
+libgcc_s_dw2-1.dll
+LICENSE.txt
+main.code-workspace 
+Makefile
+preview.jpg
