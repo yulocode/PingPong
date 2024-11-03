@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Raylib C++ Starter Template
 
 Raylib C++ Starter Template for Visual Studio Code on Windows.
@@ -24,3 +25,11 @@ Tested on both Windows 10 and Windows 11.
 | 🌍 <a href="http://www.educ8s.tv">My Website</a> | <br>
 </p>
 
+=======
+# Ping Pong Raylib 
+
+At the first time `git clone https://github.com/Hadrik/raylib-VSCode-template ` <br>
+After `git clone https://github.com/yulocode/PingPong.git`
+
+Put main.cpp on src folder
+>>>>>>> 375ad10a788851eab317bf0e3002638469ed4fa6
