@@ -129,7 +129,7 @@ int main()
     ball.x = width / 2;
     ball.y = height / 2;
     ball.radius = 20.0f;
-    ball.speedX = 7;
+    ball.speedX = 5;
     ball.speedY = 7;
 
     int score = 0; // Variável para armazenar o score
@@ -164,7 +164,7 @@ int main()
             if (CheckCollisionCircleRec(Vector2{ ball.x, ball.y }, ball.radius, Rectangle{ player.x, player.y, player.height, player.width }))
             {
                 ball.speedX *= -1;
-                ball.x = player.x - ball.radius;
+                ball.x = player.x + player.width + ball.radius;
             }
             if (CheckCollisionCircleRec(Vector2{ ball.x, ball.y }, ball.radius, Rectangle{ cpu.x, cpu.y, cpu.height, cpu.width }))
             {
