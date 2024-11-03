@@ -1,10 +1,21 @@
 #include <iostream>
 #include <raylib.h>
 
-#include <raylib.h>
-
 class Paddle
 {
+
+protected:
+    void LimitedMoviment()
+    {   
+        if(y <= 0)
+        {
+            y = 0;
+        }
+        if(y + heigth >= GetScreenHeight())
+        {
+            y = GetScreenHeight() - heigth;
+        }
+    }
 public:
     int x, y;
     float width, heigth;
@@ -23,15 +34,26 @@ public:
             y = y + speed;
         } 
 
-        if(y <= 0)
+        LimitedMoviment();
+    }
+};
+
+class CpuPaddle: public Paddle
+{
+    public:
+    void Update(int ballY)
+    {
+        if(y + heigth/2 > ballY)
         {
-            y = 0;
+            y = y - speed;
         }
-        if(y + heigth >= GetScreenHeight())
+
+        if(y + heigth/2 <= ballY)
         {
-            y = GetScreenHeight() - heigth;
+            y = y + speed;
         }
-        
+
+        LimitedMoviment();
     }
 };
 Paddle player;
@@ -71,6 +93,10 @@ public:
         {
             speedY *= -1;
         }
+        if(y + radius >= GetScreenWidth() || y - radius <= 0)
+        {
+            speedX *= -1;
+        }
     }
 };
 
@@ -78,17 +104,17 @@ public:
 //{25.0f,120.0f}
 
 Ball ball;
-Paddle enemy; 
+CpuPaddle cpupaddle; 
    
 int main()
 {
    
 
     InitWindow(width, heigth, "Ping Pong!");
-    enemy.x = width-35;
-    enemy.y = (heigth/2)-60; 
-    enemy.width = 25.0f;
-    enemy.heigth = 120.0f;
+    cpupaddle.x = width-35;
+    cpupaddle.y = (heigth/2)-60; 
+    cpupaddle.width = 25.0f;
+    cpupaddle.heigth = 120.0f;
     player.x = 10; 
     player.y = (heigth/2)-60;
     
@@ -112,8 +138,8 @@ int main()
             player.Draw();
             player.Update();
 
-            enemy.Draw();
-
+            cpupaddle.Draw();
+            cpupaddle.Update(ball.y);
             DrawLine(width/2, 0, width/2,heigth, WHITE);
 
         EndDrawing();
