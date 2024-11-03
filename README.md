@@ -5,7 +5,7 @@ After `git clone https://github.com/yulocode/PingPong.git`
 
 Put main.cpp on src folder
 
-=====================================================================================================================
+==================================================================================================
 # Video Tutorial
 Powerful Raylib
 <p align="center">
