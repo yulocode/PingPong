@@ -3,169 +3,189 @@
 
 class Paddle
 {
-
 protected:
     void LimitedMoviment()
-    {   
-        if(y <= 0)
+    {
+        if (y <= 0)
         {
             y = 0;
         }
-        if(y + heigth >= GetScreenHeight())
+        if (y + height >= GetScreenHeight())
         {
-            y = GetScreenHeight() - heigth;
+            y = GetScreenHeight() - height;
         }
     }
+
 public:
-    int x, y;
-    float width, heigth;
+    float x, y;
+    float width, height;
     int speed;
+
     void Draw()
     {
-        DrawRectangle(x,y,width,heigth, WHITE);
+        DrawRectangle(x, y, width, height, WHITE);
     }
+
     void Update()
     {
-        if(IsKeyDown(KEY_UP))
+        if (IsKeyDown(KEY_UP))
         {
-            y = y - speed;
-        } else if(IsKeyDown(KEY_DOWN))
-        {
-            y = y + speed;
-        } 
-
-        LimitedMoviment();
-    }
-};
-
-class CpuPaddle: public Paddle
-{
-    public:
-    void Update(int ballY)
-    {
-        if(y + heigth/2 > ballY)
-        {
-            y = y - speed;
+            y -= speed;
         }
-
-        if(y + heigth/2 <= ballY)
+        else if (IsKeyDown(KEY_DOWN))
         {
-            y = y + speed;
+            y += speed;
         }
 
         LimitedMoviment();
     }
 };
-Paddle player;
-int width = 1260;
-int heigth = 840;
 
-class  Ball
+class CpuPaddle : public Paddle
 {
 public:
-    float x,y;
+    void Update(float ballY)
+    {
+        if (y + height / 2 < ballY)
+        {
+            y += speed; // Move para baixo
+        }
+        else if (y + height / 2 > ballY)
+        {
+            y -= speed; // Move para cima
+        }
+
+        LimitedMoviment(); // Garante que o paddle fique dentro da tela
+    }
+};
+
+Paddle player;
+int width = 1260;
+int height = 840;
+
+class Ball
+{
+public:
+    float x, y;
     int speedX, speedY;
     float radius;
 
     void Draw()
     {
-        DrawCircle(x,y,radius, WHITE);
+        DrawCircle(x, y, radius, WHITE);
     }
-    void Update()
+
+    void Update(int &score)
     {
         x += speedX;
         y += speedY;
 
-         
-        if(x + radius == player.width || x - radius <= 0)
+        if (x + radius > GetScreenWidth())
         {
-            speedX *= -1;
+            // Ponto marcado para o jogador
+            score++;
+            Reset();
+        }
+        if (x + radius < 0)
+        {
+            // Ponto marcado para o CPU
+            score--;
+            Reset();
         }
 
-        if(x + radius > GetScreenWidth())
-        {
-            
-            DrawText("1", 10, 0, 25, WHITE);
-            
-        }
-
-        if(y + radius >= GetScreenHeight() || y - radius <= 0)
+        if (y + radius >= GetScreenHeight() || y - radius <= 0)
         {
             speedY *= -1;
         }
-        if(x + radius >= GetScreenWidth() || y - radius <= 0)
-        {
-            speedX *= -1;
-        }
+    }
+
+    void Reset()
+    {
+        x = width / 2;
+        y = height / 2;
+        speedX = (speedX < 0 ? -7 : 7); // Mantém a direção original, muda apenas a posição
+        speedY = 7; // Reseta a velocidade vertical
     }
 };
 
-//{width-35, heigth/2-60}
-//{25.0f,120.0f}
-
 Ball ball;
-CpuPaddle cpupaddle; 
-   
+CpuPaddle cpu;
+
 int main()
 {
-   
+    InitWindow(width, height, "Ping Pong!");
+    cpu.x = width - 35;
+    cpu.y = (height / 2) - 60;
+    cpu.width = 25.0f;
+    cpu.height = 120.0f;
+    cpu.speed = 10;
 
-    InitWindow(width, heigth, "Ping Pong!");
-    cpupaddle.x = width-35;
-    cpupaddle.y = (heigth/2)-60; 
-    cpupaddle.width = 25.0f;
-    cpupaddle.heigth = 120.0f;
-    player.x = 10; 
-    player.y = (heigth/2)-60;
-    
+    player.x = 10;
+    player.y = (height / 2) - 60;
     player.width = 25.0f;
-    player.heigth = 120.0f;
+    player.height = 120.0f;
     player.speed = 7;
-    ball.x = width/2;   
-    ball.y = heigth/2; 
-    ball.radius = 20.0f; 
+
+    ball.x = width / 2;
+    ball.y = height / 2;
+    ball.radius = 20.0f;
     ball.speedX = 7;
     ball.speedY = 7;
 
+    int score = 0; // Variável para armazenar o score
     bool isInMenu = true;
+
     while (!WindowShouldClose())
     {
-
-        if(IsKeyPressed(KEY_ENTER))
+        if (IsKeyPressed(KEY_ENTER))
         {
             isInMenu = false;
-        } else if(IsKeyPressed(KEY_P))
+        }
+        else if (IsKeyPressed(KEY_P))
         {
             isInMenu = true;
         }
-        
+
         BeginDrawing();
 
-            if(isInMenu)
-            {
+        if (isInMenu)
+        {
             ClearBackground(RAYWHITE);
-            DrawText("Press enter to play",190, 200, 50, BLACK);
+            DrawText("Press enter to play", 190, 200, 50, BLACK);
             DrawText("Controls: Up and Down", 190, 250, 20, BLACK);
             DrawText("Press P to pause", 190, 270, 20, BLACK);
-            }
-            else 
-            {
+        }
+        else
+        {
             ClearBackground(GRAY);
             ball.Draw();
-            ball.Update();
-           
+            ball.Update(score); // Passa o score para a função Update da bola
+
+            if (CheckCollisionCircleRec(Vector2{ ball.x, ball.y }, ball.radius, Rectangle{ player.x, player.y, player.height, player.width }))
+            {
+                ball.speedX *= -1;
+                ball.x = player.x - ball.radius;
+            }
+            if (CheckCollisionCircleRec(Vector2{ ball.x, ball.y }, ball.radius, Rectangle{ cpu.x, cpu.y, cpu.height, cpu.width }))
+            {
+                ball.speedX *= -1;
+                ball.x = cpu.x - ball.radius;
+            }
+
             player.Draw();
             player.Update();
 
-            cpupaddle.Draw();
-            cpupaddle.Update(ball.y);
-            DrawLine(width/2, 0, width/2,heigth, WHITE);
-            }
+            cpu.Draw();
+            cpu.Update(ball.y);
+            DrawLine(width / 2, 0, width / 2, height, WHITE);
+
+            // Desenha o score na tela
+            DrawText(TextFormat("Score: %i", score), 10, 10, 20, WHITE);
+        }
 
         EndDrawing();
     }
-        
+
     CloseWindow();
-    
     return 0;
 }
