@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# Raylib C++ Starter Template
+# Ping Pong 
 
 Raylib C++ Starter Template for Visual Studio Code on Windows.
 
