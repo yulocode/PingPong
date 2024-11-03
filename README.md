@@ -5,7 +5,7 @@ After `git clone https://github.com/yulocode/PingPong.git`
 
 Put main.cpp on src folder
 <p align="center">
- =================================================================================
+ =========================================================================
 </p>
 
 <h2>Video Tutorial</h2>
