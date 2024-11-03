@@ -8,3 +8,4 @@ LICENSE.txt
 main.code-workspace 
 Makefile
 preview.jpg
+.gitignore
